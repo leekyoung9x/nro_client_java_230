@@ -1,0 +1,34 @@
+# Ignore build artifacts and IDE files
+build/
+build/**
+compiled/
+compiled/**
+preprocessed/
+preprocessed/**
+preverified/
+preverified/**
+preverifysrc/
+preverifysrc/**
+dist/
+dist/**
+nbproject/private/
+nbproject/private/**
+*.class
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Do not ignore source and configs
+!src/
+!Memory_Bank/
+!nbproject/
+!nbproject/project.*
+!nbproject/genfiles.properties
+
+# Ignore OS-specific files
+ehthumbs.db
+Icon?
