@@ -92,7 +92,8 @@ public final class Session_ME implements ISession {
          try {
             String key = "160D5A46-742D-47A8-8F13-9B7605D594CD"; // TODO: thay bằng key thực tế hoặc biến truyền vào
             byte[] keyBytes = key.getBytes("UTF-8");
-            this.p.write(keyBytes.length);
+            
+            writeLittleEndianUnsignedShort(this.p, keyBytes.length);
             this.p.write(keyBytes);
          } catch (Exception e) {
             e.printStackTrace();
@@ -207,4 +208,26 @@ public final class Session_ME implements ISession {
 
       return var1;
    }
+   
+   /**
+     * Ghi một số nguyên không dấu 2-byte (tương đương ushort của C#)
+     * vào OutputStream theo thứ tự Little-Endian.
+     *
+     * @param dos   OutputStream để ghi dữ liệu.
+     * @param value Giá trị số nguyên (nằm trong khoảng 0-65535) cần ghi.
+     * @throws IOException Nếu có lỗi xảy ra khi ghi vào stream.
+     */
+    public static void writeLittleEndianUnsignedShort(DataOutputStream dos, int value) throws IOException {
+        // Lấy byte thấp (LSB - Least Significant Byte)
+        // Dùng phép AND với 0xFF (00000000 11111111) để lấy 8 bit cuối
+        int byte1 = value & 0xFF;
+
+        // Lấy byte cao (MSB - Most Significant Byte)
+        // Dịch phải 8 bit để đẩy 8 bit cao xuống vị trí 8 bit thấp, sau đó AND với 0xFF
+        int byte2 = (value >> 8) & 0xFF;
+
+        // Ghi vào stream theo thứ tự Little-Endian: byte thấp trước, byte cao sau.
+        dos.write(byte1);
+        dos.write(byte2);
+    }
 }

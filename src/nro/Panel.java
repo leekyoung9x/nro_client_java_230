@@ -4406,112 +4406,116 @@ public final class Panel implements IActionListener, nr_bt {
         this.f(nr_eh);
     }
 
-   private void x(final mGraphics g) {
-    final Item[] ag = Char.myCharz().arrItemBody;
-    final Item[] ae = Char.myCharz().arrItemBag;
-
-    int bodyLines = ag.length;
-    int gridCols = 6;
-    int gridCellSize = 28;
-    int gridGap = 2;
-
-    this.M = bodyLines + ae.length;
-    if (this.ah > this.M) this.ah = this.M;
-    if (this.ah < 1) this.ah = 1;
-
-    g.e(this.ab, this.ac, this.ad, this.ae);
-    g.a(0, -this.g);
-
-    try {
-        // Vẽ item body
-        for (int i = 0; i < ag.length; i++) {
-            Item item = ag[i];
-            int n3 = this.ab + 36;
-            int n4 = this.ac + i * this.aA;
-            int n5 = this.ad - 36;
-            int n6 = this.aA - 1;
-            int ab = this.ab;
-            int n7 = this.ac + i * this.aA;
-            int n8 = this.aA - 1;
-
-            int displayIndex = i + 1;
-            if (n4 - this.g <= this.ac + this.ae && n4 - this.g >= this.ac - this.aA) {
-                boolean isSelected = (displayIndex == this.ah);
-                g.a(isSelected ? 16383818 : 15723751);
-                g.b(n3, n4, n5, n6);
-                g.a(isSelected ? 9541120 : 11837316);
-                g.b(ab, n7, 34, n8);
-
-                if (item == null) continue;
-
-                // Vẽ tên item + icon
-                String name = item.template.name;
-                String suffix = "";
-                for (int m = 0; m < item.itemOption.length; m++) {
-                    ItemOption opt = item.itemOption[m];
-                    if (opt.optionTemplate.id == 72) {
-                        suffix = " [+" + opt.param + "]";
-                        break;
+   private void x(final mGraphics nr_eh) {
+        nr_eh.a(16711680);
+        final Item[] ag = Char.myCharz().arrItemBody;
+        final Item[] ae = Char.myCharz().arrItemBag;
+        this.M = this.i(ag.length + ae.length);
+        final int n = (ag.length + ae.length) / 20 + (((ag.length + ae.length) % 20 > 0) ? 1 : 0);
+        this.aC = this.ad / n;
+        for (int i = 0; i < n; ++i) {
+            final int n2 = (i == this.bM && this.ah == 0) ? ((GameCanvas.gameTick % 10 < 7) ? -1 : 0) : 0;
+            nr_eh.a((i == this.bM) ? 16383818 : 15723751);
+            nr_eh.d(this.ab + i * this.aC, n2 + 89 - 10, this.aC - 1, 21);
+            if (i == this.bM) {
+                nr_eh.a(13524492);
+                nr_eh.d(this.ab + i * this.aC, n2 + 89 - 10 + 21 - 3, this.aC - 1, 3);
+            }
+            mFont.o.drawString(nr_eh, new StringBuffer().append(i + 1).toString(), this.ab + i * this.aC + this.aC / 2, n2 + 91 - 10, 2);
+        }
+        nr_eh.e(this.ab, this.ac + 21, this.ad, this.ae - 21);
+        nr_eh.a(0, -this.g);
+        try {
+            for (int j = 1; j < this.M; ++j) {
+                final int n3 = this.ab + 36;
+                final int n4 = this.ac + j * this.aA;
+                final int n5 = this.ad - 36;
+                final int n6 = this.aA - 1;
+                final int ab = this.ab;
+                final int n7 = this.ac + j * this.aA;
+                final int n8 = this.aA - 1;
+                if (n4 - this.g <= this.ac + this.ae && n4 - this.g >= this.ac - this.aA) {
+                    final boolean a = a(j, this.bM, Char.myCharz().arrItemBody);
+                    final int c = c(j, this.bM);
+                    final int b = b(j, this.bM, Char.myCharz().arrItemBody);
+                    nr_eh.a((j == this.ah) ? 16383818 : (a ? 15196114 : 15723751));
+                    nr_eh.b(n3, n4, n5, n6);
+                    nr_eh.a((j == this.ah) ? 9541120 : (a ? 9993045 : 11837316));
+                    final Item nr_h;
+                    if ((nr_h = (a ? ag[c] : ae[b])) != null) {
+                        for (int k = 0; k < nr_h.itemOption.length; ++k) {
+                            final byte g;
+                            final int f;
+                            if (nr_h.itemOption[k].optionTemplate.id == 72 && nr_h.itemOption[k].param > 0 && (f = f(g = g(nr_h.itemOption[k].param))) != -1) {
+                                final int ah = this.ah;
+                                nr_eh.a(f(g));
+                            }
+                        }
                     }
-                }
-                nro.mFont.m.drawString(g, name + suffix, n3 + 5, n4 + 1, 0);
-
-                // Vẽ option chính (1 hoặc 2 option)
-                String options = "";
-                if (item.itemOption.length > 0) {
-                    ItemOption opt0 = item.itemOption[0];
-                    if (opt0.optionTemplate.id != 102 && opt0.optionTemplate.id != 107) {
-                        options += opt0.getOptionString();
+                    nr_eh.b(ab, n7, 34, n8);
+                    if (nr_h != null && nr_h.isSelect && GameCanvas.panel.y == 12) {
+                        nr_eh.a((j == this.ah) ? 7040779 : 6047789);
+                        nr_eh.b(ab, n7, 34, n8);
                     }
-                    if (item.itemOption.length > 1) {
-                        ItemOption opt1 = item.itemOption[1];
-                        if (opt1.optionTemplate.id != 102 && opt1.optionTemplate.id != 107) {
-                            options += ", " + opt1.getOptionString();
+                    if (nr_h != null) {
+                        String string = "";
+                        mFont nr_dc = nro.mFont.m;
+                        if (nr_h.itemOption != null) {
+                            for (int l = 0; l < nr_h.itemOption.length; ++l) {
+                                if (nr_h.itemOption[l].optionTemplate.id == 72) {
+                                    string = " [+" + nr_h.itemOption[l].param + "]";
+                                }
+                                if (nr_h.itemOption[l].optionTemplate.id == 41) {
+                                    if (nr_h.itemOption[l].param == 1) {
+                                        nr_dc = h(0);
+                                    } else if (nr_h.itemOption[l].param == 2) {
+                                        nr_dc = h(2);
+                                    } else if (nr_h.itemOption[l].param == 3) {
+                                        nr_dc = h(8);
+                                    } else if (nr_h.itemOption[l].param == 4) {
+                                        nr_dc = h(7);
+                                    }
+                                }
+                            }
+                        }
+                        nr_dc.drawString(nr_eh, String.valueOf(nr_h.template.name) + string, n3 + 5, n4 + 1, 0);
+                        String s = "";
+                        if (nr_h.itemOption != null) {
+                            if (nr_h.itemOption.length > 0 && nr_h.itemOption[0] != null && nr_h.itemOption[0].optionTemplate.id != 102 && nr_h.itemOption[0].optionTemplate.id != 107) {
+                                s = String.valueOf(s) + nr_h.itemOption[0].getOptionString();
+                            }
+                            mFont nr_dc2 = nro.mFont.q;
+                            if (nr_h.compare < 0 && nr_h.template.type != 5) {
+                                nr_dc2 = nro.mFont.p;
+                            }
+                            if (nr_h.itemOption.length > 1) {
+                                for (int n9 = 1; n9 < 2; ++n9) {
+                                    if (nr_h.itemOption[n9] != null && nr_h.itemOption[n9].optionTemplate.id != 102 && nr_h.itemOption[n9].optionTemplate.id != 107) {
+                                        s = String.valueOf(s) + "," + nr_h.itemOption[n9].getOptionString();
+                                    }
+                                }
+                            }
+                            nr_dc2.drawString(nr_eh, s, n3 + 5, n4 + 11, 0);
+                        }
+                        SmallImage.drawSmallImage(nr_eh, nr_h.template.iconID, ab + 17, n7 + n8 / 2, 0, 3);
+                        if (nr_h.itemOption != null) {
+                            for (int n10 = 0; n10 < nr_h.itemOption.length; ++n10) {
+                                this.a(nr_eh, nr_h.itemOption[n10].optionTemplate.id, ab, n7, n8);
+                            }
+                            for (int n11 = 0; n11 < nr_h.itemOption.length; ++n11) {
+                                a(nr_eh, nr_h.itemOption[n11].optionTemplate.id, nr_h.itemOption[n11].param, ab, n7, 34, n8);
+                            }
+                        }
+                        if (nr_h.quantity > 1) {
+                            nro.mFont.n.drawString(nr_eh, new StringBuffer().append(nr_h.quantity).toString(), ab + 34, n7 + n8 - nro.mFont.n.a(), 1);
                         }
                     }
                 }
-                nro.mFont.q.drawString(g, options, n3 + 5, n4 + 11, 0);
-
-                SmallImage.drawSmallImage(g, item.template.iconID, ab + 17, n7 + n8 / 2, 0, 3);
-
-                if (item.quantity > 1) {
-                    nro.mFont.n.drawString(g, String.valueOf(item.quantity), ab + 34, n7 + n8 - nro.mFont.n.a(), 1);
-                }
             }
+        } catch (final Exception ex) {
         }
-
-        // Vẽ item bag dạng lưới
-        int startY = this.ac + ag.length * this.aA + gridGap;
-        int baseX = this.ab + (this.ad - (gridCols * gridCellSize + (gridCols - 1) * gridGap)) / 2;
-
-        for (int i = 0; i < ae.length; i++) {
-            int col = i % gridCols;
-            int row = i / gridCols;
-            int x = baseX + col * (gridCellSize + gridGap);
-            int y = startY + row * (gridCellSize + gridGap);
-
-            int displayIndex = ag.length + i + 1;
-
-            if (y - this.g <= this.ac + this.ae && y - this.g + gridCellSize >= this.ac) {
-                g.a(displayIndex == this.ah ? 9541120 : 11837316);
-                g.b(x, y, gridCellSize, gridCellSize);
-
-                Item item = ae[i];
-                if (item != null) {
-                    SmallImage.drawSmallImage(g, item.template.iconID, x + gridCellSize / 2, y + gridCellSize / 2, 0, 3);
-                    if (item.quantity > 1) {
-                        mFont.s.drawString(g, String.valueOf(item.quantity), x + gridCellSize - 1, y + gridCellSize - mFont.s.getHeight(), 1);
-                    }
-                }
-            }
-        }
-
-    } catch (Exception ex) {
-        // ignore
+        this.f(nr_eh);
     }
-
-    this.f(g);
-}
 
     private void y(mGraphics var1) {
         if (this.y != 23 && this.y != 24) {
